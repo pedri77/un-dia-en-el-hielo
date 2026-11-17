@@ -108,7 +108,7 @@ export const PARADAS: Parada[] = [
     titulo: 'Los que trabajan',
     texto:
       'No todo el mundo está de fiesta. Este hombre carga a la espalda un haz de juncos más grande que él. El junco se cortaba en invierno, cuando el agua helada dejaba llegar a él.',
-    rect: [4680, 3240, 440, 440],
+    rect: [4680, 3230, 440, 440],
     fuentes: ['dutchnews', 'rijks'],
   },
   {

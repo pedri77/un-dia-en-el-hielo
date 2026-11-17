@@ -9,7 +9,8 @@
     "preview": "vite preview --port=3030",
     "lint": "tsc --noEmit",
     "test": "node --test tests/",
-    "teselas": "uv run --with pillow python -I scripts/teselas.py"
+    "teselas": "uv run --with pillow python -I scripts/teselas.py",
+    "recortes": "uv run --with pillow python -I scripts/recortes.py"
   },
   "dependencies": {
     "d3-interpolate": "^3.0.1",
