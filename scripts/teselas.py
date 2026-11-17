@@ -19,8 +19,9 @@ Salida:
   src/lienzo.json                        {ancho, alto, tesela, niveles}
 
 Lo descargado se guarda en originales/ (ignorado por git) y se reutiliza.
-La licencia y la procedencia de la imagen van en src/content.ts (FUENTE), no aquí.
+La licencia y la procedencia de la imagen van en src/content.ts (OBRA), no aquí.
 """
+import hashlib
 import json
 import math
 import pathlib
@@ -79,8 +80,11 @@ def obtener(fuente: str) -> pathlib.Path:
         print(f"IIIF {info['width']}×{info['height']} → {url}")
     else:
         url = fuente
+    # Una copia por URL (no se mezcla una obra con otra) y original.jpg apunta a la última usada.
+    copia = ORIGINALES / f"{hashlib.sha1(url.encode()).hexdigest()[:10]}.jpg"
+    bajar(url, copia)
     destino = ORIGINALES / "original.jpg"
-    bajar(url, destino)
+    shutil.copyfile(copia, destino)
     return destino
 
 
