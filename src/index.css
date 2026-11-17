@@ -1,0 +1,305 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Tokens. Variante «pizarra helada»: fondo oscuro frío para que el cuadro, que es claro, mande.
+   Cambia valores, no nombres. Registro: web-cinematica/references/variantes.md.
+   ------------------------------------------------------------------ */
+@theme {
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Public Sans", system-ui, sans-serif;
+
+  --color-void: oklch(19% 0.018 245);
+  --color-superficie: oklch(23% 0.02 245);
+  --color-elevado: oklch(29% 0.022 245);
+  --color-borde: oklch(38% 0.022 245);
+  --color-acento: oklch(62% 0.19 28);
+  --color-texto: oklch(95% 0.01 240);
+  --color-texto-2: oklch(82% 0.015 240);
+  --color-texto-3: oklch(68% 0.018 240);
+
+  --text-hero: clamp(2.75rem, 7vw, 5.25rem);
+  --text-hero--line-height: 0.95;
+  --text-lead: clamp(1.0625rem, 1.5vw, 1.25rem);
+  --text-lead--line-height: 1.5;
+  --text-body: clamp(0.9375rem, 1vw, 1rem);
+  --text-body--line-height: 1.6;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    background: var(--color-void);
+  }
+  body {
+    margin: 0;
+    background: var(--color-void);
+    color: var(--color-texto);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-acento);
+    outline-offset: 2px;
+  }
+  .visor:focus-visible {
+    outline-offset: -4px;
+  }
+}
+
+@layer components {
+  .cabecera,
+  .panel {
+    background: color-mix(in oklch, var(--color-superficie) 92%, transparent);
+    border: 1px solid var(--color-borde);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 40px oklch(0% 0 0 / 0.35);
+  }
+  .etiqueta {
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-acento);
+    font-weight: 600;
+  }
+  .boton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 2.5rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-borde);
+    background: color-mix(in oklch, var(--color-elevado) 92%, transparent);
+    color: var(--color-texto);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .boton:hover:not(:disabled) {
+    border-color: var(--color-texto-3);
+  }
+  .boton:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+  .boton-acento {
+    background: var(--color-acento);
+    border-color: var(--color-acento);
+    color: oklch(15% 0.02 30);
+    font-weight: 600;
+  }
+  .boton-acento:hover:not(:disabled) {
+    background: oklch(68% 0.19 28);
+  }
+  .boton-grande {
+    min-height: 2.875rem;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9375rem;
+  }
+  .control {
+    width: 2.75rem;
+    height: 2.75rem;
+    display: grid;
+    place-items: center;
+    font-size: 1.25rem;
+    color: var(--color-texto);
+    cursor: pointer;
+  }
+  .control + .control {
+    border-top: 1px solid var(--color-borde);
+  }
+  .control:hover {
+    background: var(--color-elevado);
+  }
+  .pestana {
+    flex: 1;
+    padding: 0.75rem 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-texto-3);
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+  }
+  .pestana[aria-pressed="true"] {
+    color: var(--color-texto);
+    border-bottom-color: var(--color-acento);
+  }
+  .enlace {
+    color: var(--color-texto-2);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklch, var(--color-texto-3) 60%, transparent);
+    text-underline-offset: 2px;
+    cursor: pointer;
+  }
+  .enlace:hover {
+    color: var(--color-texto);
+  }
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.6rem;
+    border-radius: 0.5rem;
+    background: var(--color-elevado);
+    text-align: left;
+    font-size: 0.8125rem;
+    line-height: 1.25;
+    cursor: pointer;
+  }
+  .chip:hover {
+    background: var(--color-borde);
+  }
+  .chip-num {
+    flex: none;
+    width: 1.375rem;
+    height: 1.375rem;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--color-acento);
+    color: oklch(15% 0.02 30);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  /* Marcas sobre el cuadro: deben leerse sobre nieve clara y sobre tejados oscuros. */
+  .marca {
+    cursor: pointer;
+  }
+  .marca-numero {
+    width: 1.875rem;
+    height: 1.875rem;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--color-acento);
+    color: oklch(15% 0.02 30);
+    font-size: 0.875rem;
+    font-weight: 700;
+    border: 2px solid oklch(98% 0 0);
+    box-shadow: 0 2px 10px oklch(0% 0 0 / 0.45);
+    transition: transform 0.15s;
+  }
+  .marca:hover .marca-numero {
+    transform: scale(1.12);
+  }
+  .marca-titulo {
+    white-space: nowrap;
+    padding: 0.2rem 0.55rem;
+    border-radius: 0.375rem;
+    background: color-mix(in oklch, var(--color-void) 88%, transparent);
+    color: var(--color-texto);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    box-shadow: 0 2px 10px oklch(0% 0 0 / 0.35);
+  }
+  .marca-recuadro {
+    border: 2px solid var(--color-acento);
+    box-shadow:
+      0 0 0 2px oklch(98% 0 0 / 0.7),
+      0 0 0 9999px oklch(10% 0.02 245 / 0.38);
+  }
+
+  .hallado {
+    border: 3px solid var(--color-acento);
+    box-shadow: 0 0 0 2px oklch(98% 0 0 / 0.8);
+  }
+  .hallado-nuevo {
+    animation: latido 1.2s ease-out 2;
+  }
+  .fallo {
+    border: 2px solid oklch(98% 0 0 / 0.9);
+    animation: onda 0.7s ease-out forwards;
+  }
+
+  .busca-item {
+    padding: 0.5rem 0.6rem;
+    border-radius: 0.5rem;
+    background: var(--color-elevado);
+    font-size: 0.875rem;
+  }
+  .busca-marca {
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    border: 1.5px solid var(--color-texto-3);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+  .busca-hecho .busca-marca {
+    background: var(--color-acento);
+    border-color: var(--color-acento);
+    color: oklch(15% 0.02 30);
+  }
+
+  .portada {
+    background:
+      linear-gradient(to top, oklch(12% 0.02 245 / 0.85), transparent 55%),
+      radial-gradient(ellipse at center, oklch(12% 0.02 245 / 0.55), oklch(12% 0.02 245 / 0.2) 70%);
+  }
+  .portada h2 {
+    text-shadow: 0 2px 24px oklch(0% 0 0 / 0.6);
+  }
+
+  .dialogo {
+    margin: auto;
+    width: min(40rem, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid var(--color-borde);
+    background: var(--color-superficie);
+    color: var(--color-texto);
+  }
+  .dialogo::backdrop {
+    background: oklch(8% 0.02 245 / 0.7);
+  }
+  .ficha {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.25rem 1rem;
+    font-size: 0.875rem;
+  }
+  .ficha dt {
+    color: var(--color-texto-3);
+  }
+}
+
+@keyframes latido {
+  0% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes onda {
+  from {
+    transform: scale(0.4);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
