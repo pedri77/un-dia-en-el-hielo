@@ -4,8 +4,11 @@
 //      REDUCIDO=1 node estados.mjs …   (prefers-reduced-motion)
 //      ESPERA=3000 node estados.mjs …  (ms tras cargar: deja terminar vuelos y transiciones)
 //      SELECTOR='#s1' node estados.mjs … (captura solo ese elemento en vez de la ventana)
+// Requiere Google Chrome y playwright-core (global, o su ruta en PLAYWRIGHT_CORE).
+// El prefijo puede ser una ruta relativa (qa/d): la carpeta se crea. Cada captura lleva el estado en el nombre.
 // Imprime JSON con errores de consola, respuestas ≥ 400 y textos con NaN/Infinity/undefined por estado.
 import {createRequire} from 'node:module';
+import {mkdirSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 
 let chromium;
@@ -28,6 +31,7 @@ const [url, salida, vw = '1440', vh = '900', ...estados] = process.argv.slice(2)
 if (!estados.length) estados.push('');
 const navegador = await chromium.launch({channel: 'chrome'});
 const pagina = await navegador.newPage({viewport: {width: +vw, height: +vh}, reducedMotion: process.env.REDUCIDO === '1' ? 'reduce' : 'no-preference'});
+mkdirSync(dirname(salida), {recursive: true});
 const informe = [];
 let errores = [];
 pagina.on('pageerror', (e) => errores.push(e.message));
@@ -41,10 +45,11 @@ for (const [i, q] of estados.entries()) {
   await pagina.waitForTimeout(Number(process.env.ESPERA ?? 900)); // ESPERA=3000 si hay vuelos animados
   // Cifras rotas: el fallo típico de un explorable en los extremos.
   const rotos = await pagina.evaluate(() => (document.body.innerText.match(/[^\n]*\b(NaN|Infinity|undefined|null)\b[^\n]*/g) ?? []).slice(0, 5));
-  const nombre = `${salida}-${String(i).padStart(2, '0')}.png`;
+  const nombre = `${salida}-${String(i).padStart(2, '0')}-${(q || 'inicio').replace(/[^\w.-]+/g, '_').slice(0, 40)}.png`;
   if (process.env.SELECTOR) await pagina.locator(process.env.SELECTOR).screenshot({path: nombre});
   else await pagina.screenshot({path: nombre, fullPage: process.env.COMPLETA === '1'});
-  informe.push({estado: q || '(por defecto)', captura: nombre, errores, rotos});
+  // El título delata si se ha capturado otra web servida en el mismo puerto.
+  informe.push({estado: q || '(por defecto)', titulo: await pagina.title(), captura: nombre, errores, rotos});
 }
 console.log(JSON.stringify(informe, null, 1));
 await navegador.close();
