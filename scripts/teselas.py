@@ -9,7 +9,9 @@ Uso (desde la raíz del proyecto):
 <fuente> puede ser:
   - la URL de un info.json IIIF (museos: Rijksmuseum, Met, Getty, bibliotecas…): descarga full/max;
   - la URL directa de una imagen;
-  - un fichero local.
+  - un fichero local;
+  - --prueba: genera una imagen de prueba (rejilla numerada de 4096 × 2560) para arrancar la
+    plantilla antes de tener la obra.
 
 Salida:
   public/teselas/<n>/<col>_<fila>.webp   nivel n = escala 1/2^n (0 = resolución completa)
@@ -46,7 +48,27 @@ def bajar(url: str, destino: pathlib.Path) -> None:
         destino.write_bytes(r.read())
 
 
+def prueba() -> pathlib.Path:
+    from PIL import ImageDraw, ImageFont
+
+    ORIGINALES.mkdir(exist_ok=True)
+    w, h, lado = 4096, 2560, 256
+    im = Image.new("RGB", (w, h))
+    d = ImageDraw.Draw(im)
+    fuente = ImageFont.load_default(size=40)
+    for fila in range(h // lado):
+        for col in range(w // lado):
+            tono = 200 + 30 * ((fila + col) % 2)
+            d.rectangle([col * lado, fila * lado, (col + 1) * lado, (fila + 1) * lado], fill=(tono, tono - 10 * (fila % 3), tono - 20 * (col % 3)))
+            d.text((col * lado + 12, fila * lado + 10), f"{col * lado},{fila * lado}", fill=(40, 40, 60), font=fuente)
+    destino = ORIGINALES / "original.jpg"
+    im.save(destino, quality=90)
+    return destino
+
+
 def obtener(fuente: str) -> pathlib.Path:
+    if fuente == "--prueba":
+        return prueba()
     if not fuente.startswith("http"):
         return pathlib.Path(fuente)
     ORIGINALES.mkdir(exist_ok=True)
