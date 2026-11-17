@@ -95,15 +95,16 @@ def main() -> None:
     ancho, alto = im.size
     # Niveles hasta que la imagen entera quepa en una tesela.
     niveles = max(1, math.ceil(math.log2(max(ancho, alto) / TESELA)) + 1)
-    if SALIDA.exists():
-        shutil.rmtree(SALIDA)
+    # Solo se sustituyen las teselas que genera este script (nada más dentro de public/).
+    for viejo in SALIDA.glob("*/*.webp"):
+        viejo.unlink()
     total = 0
     for n in range(niveles):
         escala = 2 ** n
         w, h = math.ceil(ancho / escala), math.ceil(alto / escala)
         nivel = im if n == 0 else im.resize((w, h), Image.LANCZOS)
         carpeta = SALIDA / str(n)
-        carpeta.mkdir(parents=True)
+        carpeta.mkdir(parents=True, exist_ok=True)
         for fila in range(math.ceil(h / TESELA)):
             for col in range(math.ceil(w / TESELA)):
                 caja = (col * TESELA, fila * TESELA, min(w, (col + 1) * TESELA), min(h, (fila + 1) * TESELA))
