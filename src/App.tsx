@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import datos from './lienzo.json';
-import {BUSCA, ENTRADA, FUENTES, OBRA, PARADAS, SUBTITULO, TITULO} from './content';
+import {BUSCA, ENTRADA, ETIQUETA, FUENTES, ID, OBRA, PARADAS, SUBTITULO, TITULO, TODO_ENCONTRADO} from './content';
 import {Lienzo} from './components/Lienzo';
 import {cajaPantalla, Marcas} from './components/Marcas';
 import {Minimapa} from './components/Minimapa';
@@ -10,7 +10,7 @@ import {useMovimientoReducido} from './hooks/useMovimientoReducido';
 import {dentro, encuadrar, kEncaje, SIN_HOLGURA, zoomRelativo, type Camara, type Holgura, type Rect, type Vista} from './lib/camara';
 
 type Modo = 'portada' | 'recorrido' | 'explorar' | 'busca';
-const CLAVE = 'un-dia-en-el-hielo:encontrados';
+const CLAVE = `${ID}:encontrados`;
 
 /** Estado inicial desde la URL: ?parada=3, ?modo=explorar, ?modo=busca. */
 function leerUrl(): {modo: Modo; parada: number} {
@@ -172,7 +172,7 @@ export default function App() {
         tabIndex={0}
         role="application"
         aria-roledescription="lienzo navegable"
-        aria-label={`${OBRA.titulo}, de Hendrick Avercamp. Flechas para moverte, más y menos para acercar y alejar, 0 para ver el cuadro entero.`}
+        aria-label={`${OBRA.titulo}, de ${OBRA.autorCorto}. Flechas para moverte, más y menos para acercar y alejar, 0 para ver el cuadro entero.`}
         onKeyDown={teclado}
         className={`visor absolute inset-0 touch-none select-none ${modo === 'busca' ? 'cursor-crosshair' : 'cursor-grab active:cursor-grabbing'}`}
       >
@@ -340,7 +340,7 @@ function Portada({onEmpezar, onExplorar, onBuscar}: {onEmpezar: () => void; onEx
   return (
     <section className="portada pointer-events-none absolute inset-0 flex items-end justify-center p-4 pb-8 sm:items-center sm:p-8">
       <div className="pointer-events-auto max-w-xl rounded-2xl p-6 text-center sm:p-9">
-        <p className="etiqueta">Hendrick Avercamp · hacia 1608</p>
+        <p className="etiqueta">{ETIQUETA}</p>
         <h2 className="mt-2 font-display text-hero">{TITULO}</h2>
         <p className="mx-auto mt-3 max-w-md text-lead text-texto-2">{ENTRADA}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
@@ -371,7 +371,7 @@ function Busca({encontrados, abierta, onAbrir, onMostrar, onReiniciar}: {
     <div>
       <p className="text-body text-texto-2">
         {todos
-          ? '¡Los has encontrado todos! Avercamp escondió muchos más: sigue mirando.'
+          ? TODO_ENCONTRADO
           : 'Acércate y toca el cuadro donde creas que está cada cosa.'}
       </p>
       <ul className="mt-3 space-y-1.5">

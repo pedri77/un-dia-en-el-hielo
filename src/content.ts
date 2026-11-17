@@ -4,12 +4,17 @@
  */
 import type {Rect} from './lib/camara';
 
+export const ID = 'un-dia-en-el-hielo'; // prefijo de localStorage
 export const TITULO = 'Un día en el hielo';
 export const SUBTITULO = 'Hendrick Avercamp, Paisaje invernal con patinadores, hacia 1608';
 export const ENTRADA =
   'De lejos es una postal de invierno. De cerca hay cientos de personas: la mayoría se divierte y otras trabajan por pura necesidad. Acércate.';
 
+export const ETIQUETA = 'Hendrick Avercamp · hacia 1608';
+export const TODO_ENCONTRADO = '¡Los has encontrado todos! Avercamp escondió muchos más: sigue mirando.';
+
 export const OBRA = {
+  autorCorto: 'Hendrick Avercamp',
   titulo: 'Paisaje invernal con patinadores',
   original: 'Winterlandschap met ijsvermaak',
   autor: 'Hendrick Avercamp (Ámsterdam, 1585 – Kampen, 1634)',
@@ -19,6 +24,11 @@ export const OBRA = {
   url: 'https://www.rijksmuseum.nl/en/collection/SK-A-1718',
   imagen: 'Imagen: Rijksmuseum, dominio público (Public Domain Mark 1.0)',
 };
+
+/** Párrafos de «Sobre el cuadro»: contexto del autor y de la obra, con fuentes en FUENTES. */
+export const SOBRE = [
+  'Avercamp nació en Ámsterdam en 1585, se crió en Kampen y murió allí en 1634. Le llamaban «el Mudo de Kampen»: no hablaba y probablemente era sordo de nacimiento. Pintó sobre todo inviernos, en plena Pequeña Edad de Hielo, y fue de los primeros pintores holandeses en especializarse en escenas de nieve. Este es uno de sus primeros cuadros y se inspira en los inviernos de Pieter Bruegel el Viejo.',
+];
 
 export type Fuente = {titulo: string; url: string};
 export const FUENTES: Record<string, Fuente> = {

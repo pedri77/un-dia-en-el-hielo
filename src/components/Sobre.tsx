@@ -1,5 +1,5 @@
 import {useEffect, useRef} from 'react';
-import {FUENTES, OBRA} from '../content';
+import {FUENTES, OBRA, SOBRE} from '../content';
 import lienzo from '../lienzo.json';
 
 /** Ficha de la obra, cómo se usa y fuentes, en un <dialog> nativo (foco y Escape gratis). */
@@ -40,11 +40,11 @@ export function Sobre({abierto, onCerrar}: {abierto: boolean; onCerrar: () => vo
           </a>
         </dd>
       </dl>
-      <p className="mt-4 text-body text-texto-2">
-        Avercamp nació en Ámsterdam en 1585, se crió en Kampen y murió allí en 1634. Le llamaban «el Mudo de Kampen»: no hablaba y probablemente era sordo de nacimiento. Pintó
-        sobre todo inviernos, en plena Pequeña Edad de Hielo, y fue de los primeros pintores holandeses en especializarse en escenas de nieve. Este es uno de sus
-        primeros cuadros y se inspira en los inviernos de Pieter Bruegel el Viejo.
-      </p>
+      {SOBRE.map((p) => (
+        <p key={p.slice(0, 24)} className="mt-4 text-body text-texto-2">
+          {p}
+        </p>
+      ))}
       <h3 className="mt-5 font-display text-xl">Cómo moverte</h3>
       <ul className="mt-1 list-disc space-y-0.5 pl-5 text-sm text-texto-2">
         <li>Arrastra para moverte; rueda del ratón, pellizco o botones + y − para el zoom; doble clic para acercarte a un punto.</li>
