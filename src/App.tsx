@@ -108,6 +108,11 @@ export default function App() {
       if (c) volarA(c);
       setAviso(`Parada ${parada + 1} de ${PARADAS.length}: ${PARADAS[parada].titulo}`);
     } else if (modo !== 'portada') encajar();
+    else if (vista && vista.w < vista.h) {
+      // Portada en móvil vertical: encajar por la altura (vista general), no por el ancho.
+      // La primera cámara de useCamara usa el zoom mínimo, que en vertical deja una franja de 6 cm.
+      poner(vistaGeneral(vista, SIN_HOLGURA));
+    }
     escribirUrl(modo, parada);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modo, parada, vistaLista]);
